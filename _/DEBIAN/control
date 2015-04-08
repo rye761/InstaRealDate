@@ -1,0 +1,10 @@
+Package: org.thebigboss.instarealdate
+Name: InstaRealDate
+Depends: mobilesubstrate
+Architecture: iphoneos-arm
+Description: See more information about a post date in Instagram.
+Maintainer: ryebread761
+Author: ryebread761
+Section: Tweaks
+Version: 2.0.0-2
+Installed-Size: 160

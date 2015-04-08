@@ -1,0 +1,10 @@
+{
+    entry = {
+	bundle = instarealdatesettings;
+	cell = PSLinkCell;
+	detail = instarealdatesettingsListController;
+	icon = icon.png;
+	isController = 1;
+	label = InstaRealDate;
+    };
+}
