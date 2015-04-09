@@ -30,6 +30,10 @@
 	CFStringRef toPost = (CFStringRef)specifier.properties[@"PostNotification"];
 	if(toPost) CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
 }
+
+-(void)showMyTwitter:(id)sender {
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/rye761"]];
+}
 @end
 
 // vim:ft=objc
