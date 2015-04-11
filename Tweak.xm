@@ -17,6 +17,7 @@ BOOL autoExpand;
 int dateLength;
 unsigned int dateLengths[3] = {NSDateFormatterShortStyle, NSDateFormatterMediumStyle, NSDateFormatterLongStyle};
 unsigned int widthAdjust;
+unsigned int defaultClockPosition;
 
 %ctor {
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/org.thebigboss.instarealdatesettings.plist"];	
@@ -40,19 +41,22 @@ unsigned int widthAdjust;
 %new
 - (void) showFullDate {
 	//Expand the date label 
-	NSDate *takenNSDate = [NSDate dateWithTimeIntervalSince1970:[self.feedItem.takenAt timeIntervalSince1970]];
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateStyle:(unsigned int)dateLengths[dateLength]];
-	[dateFormatter setTimeStyle:(unsigned int)dateLengths[dateLength]];
-	self.timestamp.text = [dateFormatter stringFromDate: takenNSDate];
-	self.timestamp.frame = CGRectMake(self.timestamp.frame.origin.x - widthAdjust, self.timestamp.frame.origin.y, self.timestamp.frame.size.width + widthAdjust, self.timestamp.frame.size.height);
-	self.timestamp.adjustsFontSizeToFitWidth = YES;
-	
-	self.labelIconView.position = CGPointMake(self.labelIconView.position.x - widthAdjust, self.labelIconView.position.y);
+	if (self.labelIconView.position.x == defaultClockPosition) {
+		NSDate *takenNSDate = [NSDate dateWithTimeIntervalSince1970:[self.feedItem.takenAt timeIntervalSince1970]];
+		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setDateStyle:(unsigned int)dateLengths[dateLength]];
+		[dateFormatter setTimeStyle:(unsigned int)dateLengths[dateLength]];
+		self.timestamp.text = [dateFormatter stringFromDate: takenNSDate];
+		self.timestamp.frame = CGRectMake(self.timestamp.frame.origin.x - widthAdjust, self.timestamp.frame.origin.y, self.timestamp.frame.size.width + widthAdjust, self.timestamp.frame.size.height);
+		self.timestamp.adjustsFontSizeToFitWidth = YES;
+		
+		self.labelIconView.position = CGPointMake(self.labelIconView.position.x - widthAdjust, self.labelIconView.position.y);
+	}
 }
 
 - (void) layoutDateLabel {
 	%orig;
+	defaultClockPosition = self.labelIconView.position.x;
 	if (!autoExpand) {
 		self.timestamp.userInteractionEnabled = YES;
 		UITapGestureRecognizer *tapRecog = [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(showFullDate)];
