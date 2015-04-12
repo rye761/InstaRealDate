@@ -14,6 +14,7 @@
 @end
 
 BOOL autoExpand;
+BOOL hideClock;
 int dateLength;
 unsigned int dateLengths[3] = {NSDateFormatterShortStyle, NSDateFormatterMediumStyle, NSDateFormatterLongStyle};
 unsigned int widthAdjust;
@@ -22,6 +23,7 @@ unsigned int defaultClockPosition;
 %ctor {
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/org.thebigboss.instarealdatesettings.plist"];	
 	autoExpand = [settings objectForKey:@"alwaysexpand"] ? [[settings objectForKey:@"alwaysexpand"] boolValue] : NO;
+	hideClock = [settings objectForKey:@"hideclockonexpand"] ? [[settings objectForKey:@"hideclockonexpand"] boolValue] : NO;
 	dateLength = [[settings objectForKey:@"datelength"] intValue];
 	switch(dateLength) {
 		case 0:
@@ -50,7 +52,11 @@ unsigned int defaultClockPosition;
 		self.timestamp.frame = CGRectMake(self.timestamp.frame.origin.x - widthAdjust, self.timestamp.frame.origin.y, self.timestamp.frame.size.width + widthAdjust, self.timestamp.frame.size.height);
 		self.timestamp.adjustsFontSizeToFitWidth = YES;
 		
-		self.labelIconView.position = CGPointMake(self.labelIconView.position.x - widthAdjust, self.labelIconView.position.y);
+		if (hideClock) {
+			self.labelIconView.hidden = YES;
+		} else {
+			self.labelIconView.position = CGPointMake(self.labelIconView.position.x - widthAdjust, self.labelIconView.position.y);
+		}
 	}
 }
 
