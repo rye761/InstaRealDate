@@ -54,22 +54,6 @@
 			</dict>
 			<dict>
 				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false/>
-				<key>defaults</key>
-				<string>org.thebigboss.instarealdatesettings</string>
-				<key>key</key>
-				<string>hideclockonexpand</string>
-				<key>label</key>
-				<string>Hide clock on expanded date</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-			</dict>
-			<dict>
-				<key>cell</key>
 				<string>PSButtonCell</string>
 				<key>label</key>
 				<string>@rye761</string>
