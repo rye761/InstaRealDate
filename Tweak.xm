@@ -13,6 +13,8 @@
 @end
 
 BOOL autoExpand;
+BOOL showDateString;
+BOOL showTimeString;
 int dateLength;
 unsigned int dateLengths[3] = {NSDateFormatterShortStyle, NSDateFormatterMediumStyle, NSDateFormatterLongStyle};
 unsigned int widthAdjust;
@@ -21,6 +23,8 @@ unsigned int defaultLabelPosition;
 %ctor {
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/org.thebigboss.instarealdatesettings.plist"];	
 	autoExpand = [settings objectForKey:@"alwaysexpand"] ? [[settings objectForKey:@"alwaysexpand"] boolValue] : NO;
+	showDateString = [settings objectForKey:@"showdatestring"] ? [[settings objectForKey:@"showdatestring"] boolValue] : NO;
+	showTimeString = [settings objectForKey:@"showtimestring"] ? [[settings objectForKey:@"showtimestring"] boolValue] : NO;
 	dateLength = [[settings objectForKey:@"datelength"] intValue];
 	switch(dateLength) {
 		case 0:
@@ -43,8 +47,16 @@ unsigned int defaultLabelPosition;
 	if (self.timestampLabel.frame.origin.x == defaultLabelPosition) {
 		NSDate *takenNSDate = [NSDate dateWithTimeIntervalSince1970:[self.feedItem.takenAt timeIntervalSince1970]];
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setDateStyle:(unsigned int)dateLengths[dateLength]];
-		[dateFormatter setTimeStyle:(unsigned int)dateLengths[dateLength]];
+		if (showDateString) {
+			[dateFormatter setDateStyle:(unsigned int)dateLengths[dateLength]];
+		} else {
+			[dateFormatter setDateStyle:NSDateFormatterNoStyle];
+		}
+		if (showTimeString) {
+			[dateFormatter setTimeStyle:(unsigned int)dateLengths[dateLength]];
+		} else {
+			[dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+		}
 		self.timestampLabel.text = [dateFormatter stringFromDate: takenNSDate];
 		self.timestampLabel.frame = CGRectMake(self.timestampLabel.frame.origin.x - widthAdjust, self.timestampLabel.frame.origin.y, self.timestampLabel.frame.size.width + widthAdjust, self.timestampLabel.frame.size.height);
 		self.timestampLabel.adjustsFontSizeToFitWidth = YES;
