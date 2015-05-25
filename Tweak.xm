@@ -1,3 +1,5 @@
+#define pixelsPerLetter 5
+
 @interface IGDate : NSObject
 - (double) timeIntervalSince1970;
 @end
@@ -17,7 +19,7 @@ BOOL showDateString;
 BOOL showTimeString;
 int dateLength;
 unsigned int dateLengths[3] = {NSDateFormatterShortStyle, NSDateFormatterMediumStyle, NSDateFormatterLongStyle};
-unsigned int widthAdjust;
+float widthAdjust;
 unsigned int defaultLabelPosition;
 
 %ctor {
@@ -57,7 +59,9 @@ unsigned int defaultLabelPosition;
 		} else {
 			[dateFormatter setTimeStyle:NSDateFormatterNoStyle];
 		}
-		self.timestampLabel.text = [dateFormatter stringFromDate: takenNSDate];
+		NSString *expandedString = [dateFormatter stringFromDate: takenNSDate];
+		self.timestampLabel.text = expandedString;
+		widthAdjust = pixelsPerLetter * expandedString.length; 
 		self.timestampLabel.frame = CGRectMake(self.timestampLabel.frame.origin.x - widthAdjust, self.timestampLabel.frame.origin.y, self.timestampLabel.frame.size.width + widthAdjust, self.timestampLabel.frame.size.height);
 		self.timestampLabel.adjustsFontSizeToFitWidth = YES;
 	}
