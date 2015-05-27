@@ -28,17 +28,6 @@ unsigned int defaultLabelPosition;
 	showDateString = [settings objectForKey:@"showdatestring"] ? [[settings objectForKey:@"showdatestring"] boolValue] : NO;
 	showTimeString = [settings objectForKey:@"showtimestring"] ? [[settings objectForKey:@"showtimestring"] boolValue] : NO;
 	dateLength = [[settings objectForKey:@"datelength"] intValue];
-	switch(dateLength) {
-		case 0:
-			widthAdjust = 110;
-			break;
-		case 1:
-			widthAdjust = 135;
-			break;
-		case 2:
-			widthAdjust = 180;
-			break;
-	}
 }
 
 %hook IGFeedItemHeader
