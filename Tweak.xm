@@ -24,10 +24,10 @@ unsigned int defaultLabelPosition;
 
 %ctor {
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/org.thebigboss.instarealdatesettings.plist"];	
-	autoExpand = [settings objectForKey:@"alwaysexpand"] ? [[settings objectForKey:@"alwaysexpand"] boolValue] : NO;
-	showDateString = [settings objectForKey:@"showdatestring"] ? [[settings objectForKey:@"showdatestring"] boolValue] : NO;
-	showTimeString = [settings objectForKey:@"showtimestring"] ? [[settings objectForKey:@"showtimestring"] boolValue] : NO;
-	dateLength = [[settings objectForKey:@"datelength"] intValue];
+	autoExpand = [settings objectForKey:@"alwaysexpand"] ? [[settings objectForKey:@"alwaysexpand"] boolValue] : YES;
+	showDateString = [settings objectForKey:@"showdatestring"] ? [[settings objectForKey:@"showdatestring"] boolValue] : YES;
+	showTimeString = [settings objectForKey:@"showtimestring"] ? [[settings objectForKey:@"showtimestring"] boolValue] : YES;
+    dateLength = [settings objectForKey:@"datelength"] ? [[settings objectForKey:@"datelength"] intValue] : 0;
 }
 
 %hook IGFeedItemHeader
@@ -38,15 +38,15 @@ unsigned int defaultLabelPosition;
 	if (self.timestampLabel.frame.origin.x == defaultLabelPosition) {
 		NSDate *takenNSDate = [NSDate dateWithTimeIntervalSince1970:[self.feedItem.takenAt timeIntervalSince1970]];
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-		if (showDateString) {
-			[dateFormatter setDateStyle:(unsigned int)dateLengths[dateLength]];
-		} else {
+		if (!showDateString) {
 			[dateFormatter setDateStyle:NSDateFormatterNoStyle];
-		}
-		if (showTimeString) {
-			[dateFormatter setTimeStyle:(unsigned int)dateLengths[dateLength]];
 		} else {
+			[dateFormatter setDateStyle:(unsigned int)dateLengths[dateLength]];
+		}
+		if (!showTimeString) {
 			[dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+		} else {
+			[dateFormatter setTimeStyle:(unsigned int)dateLengths[dateLength]];
 		}
 		NSString *expandedString = [dateFormatter stringFromDate: takenNSDate];
 		self.timestampLabel.text = expandedString;
