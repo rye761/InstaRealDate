@@ -23,11 +23,12 @@ float widthAdjust;
 unsigned int defaultLabelPosition;
 
 %ctor {
-	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/org.thebigboss.instarealdatesettings.plist"];
+	NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/org.thebigboss.instarealdatesettings.plist"];
 	autoExpand = [settings objectForKey:@"alwaysexpand"] ? [[settings objectForKey:@"alwaysexpand"] boolValue] : YES;
 	showDateString = [settings objectForKey:@"showdatestring"] ? [[settings objectForKey:@"showdatestring"] boolValue] : YES;
 	showTimeString = [settings objectForKey:@"showtimestring"] ? [[settings objectForKey:@"showtimestring"] boolValue] : YES;
     dateLength = [settings objectForKey:@"datelength"] ? [[settings objectForKey:@"datelength"] intValue] : 0;
+    [settings release];
 }
 
 %hook IGFeedItemHeader
@@ -52,7 +53,7 @@ unsigned int defaultLabelPosition;
         [self.timestampButton setTitle:expandedString forState:UIControlStateNormal];
 		widthAdjust = pixelsPerLetter * expandedString.length;
 		self.timestampButton.frame = CGRectMake(self.timestampButton.frame.origin.x - widthAdjust, self.timestampButton.frame.origin.y, self.timestampButton.frame.size.width + widthAdjust, self.timestampButton.frame.size.height);
-		self.timestampButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+        [dateFormatter release];
 	}
 }
 
