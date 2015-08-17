@@ -53,6 +53,7 @@ unsigned int defaultLabelPosition;
         [self.timestampButton setTitle:expandedString forState:UIControlStateNormal];
 		widthAdjust = pixelsPerLetter * expandedString.length;
 		self.timestampButton.frame = CGRectMake(self.timestampButton.frame.origin.x - widthAdjust, self.timestampButton.frame.origin.y, self.timestampButton.frame.size.width + widthAdjust, self.timestampButton.frame.size.height);
+        self.timestampButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         [dateFormatter release];
 	}
 }
