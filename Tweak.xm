@@ -9,7 +9,7 @@
 @end
 
 @interface IGFeedItemHeader : UIView
-@property (retain, nonatomic) UIButton *timestampButton;
+@property (retain, nonatomic) UILabel *timestampLabel;
 @property (retain, nonatomic) id<IGFeedHeaderItem> feedItem;
 - (void) showFullDate;
 @end
@@ -36,7 +36,7 @@ unsigned int defaultLabelPosition;
 %new
 - (void) showFullDate {
 	//Expand the date label
-	if (self.timestampButton.frame.origin.x == defaultLabelPosition) {
+	if (self.timestampLabel.frame.origin.x == defaultLabelPosition) {
 		NSDate *takenNSDate = [NSDate dateWithTimeIntervalSince1970:[self.feedItem.takenAt timeIntervalSince1970]];
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		if (!showDateString) {
@@ -50,21 +50,21 @@ unsigned int defaultLabelPosition;
 			[dateFormatter setTimeStyle:(unsigned int)dateLengths[dateLength]];
 		}
 		NSString *expandedString = [dateFormatter stringFromDate: takenNSDate];
-        [self.timestampButton setTitle:expandedString forState:UIControlStateNormal];
+        [self.timestampLabel setText:expandedString];
 		widthAdjust = pixelsPerLetter * expandedString.length;
-		self.timestampButton.frame = CGRectMake(self.timestampButton.frame.origin.x - widthAdjust, self.timestampButton.frame.origin.y, self.timestampButton.frame.size.width + widthAdjust, self.timestampButton.frame.size.height);
-        self.timestampButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+		self.timestampLabel.frame = CGRectMake(self.timestampLabel.frame.origin.x - widthAdjust, self.timestampLabel.frame.origin.y, self.timestampLabel.frame.size.width + widthAdjust, self.timestampLabel.frame.size.height);
+        self.timestampLabel.adjustsFontSizeToFitWidth = YES;
         [dateFormatter release];
 	}
 }
 
 - (void) layoutSubviews {
 	%orig;
-	defaultLabelPosition = self.timestampButton.frame.origin.x;
+	defaultLabelPosition = self.timestampLabel.frame.origin.x;
 	if (!autoExpand) {
-		self.timestampButton.userInteractionEnabled = YES;
+		self.timestampLabel.userInteractionEnabled = YES;
 		UITapGestureRecognizer *tapRecog = [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(showFullDate)];
-		[self.timestampButton addGestureRecognizer:tapRecog];
+		[self.timestampLabel addGestureRecognizer:tapRecog];
 	} else {
 		[self showFullDate];
 	}
