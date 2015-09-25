@@ -17,6 +17,7 @@
 BOOL autoExpand;
 BOOL showDateString;
 BOOL showTimeString;
+BOOL enabled;
 int dateLength;
 unsigned int dateLengths[3] = {NSDateFormatterShortStyle, NSDateFormatterMediumStyle, NSDateFormatterLongStyle};
 float widthAdjust;
@@ -28,6 +29,7 @@ unsigned int defaultLabelPosition;
 	showDateString = [settings objectForKey:@"showdatestring"] ? [[settings objectForKey:@"showdatestring"] boolValue] : YES;
 	showTimeString = [settings objectForKey:@"showtimestring"] ? [[settings objectForKey:@"showtimestring"] boolValue] : YES;
     dateLength = [settings objectForKey:@"datelength"] ? [[settings objectForKey:@"datelength"] intValue] : 0;
+	enabled = [settings objectForKey:@"instarealdateenable"] ? [[settings objectForKey:@"instarealdateenable"] boolValue] : YES;
     [settings release];
 }
 
@@ -60,11 +62,14 @@ unsigned int defaultLabelPosition;
 
 - (void) layoutSubviews {
 	%orig;
+    if (!enabled) { return; }
+
 	defaultLabelPosition = self.timestampLabel.frame.origin.x;
 	if (!autoExpand) {
 		self.timestampLabel.userInteractionEnabled = YES;
 		UITapGestureRecognizer *tapRecog = [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(showFullDate)];
 		[self.timestampLabel addGestureRecognizer:tapRecog];
+        [tapRecog release];
 	} else {
 		[self showFullDate];
 	}
