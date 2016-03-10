@@ -1,7 +1,7 @@
 Package: org.thebigboss.instarealdate
 Name: InstaRealDate
 Depends: mobilesubstrate
-Version: 2.4.2
+Version: 2.4.3
 Architecture: iphoneos-arm
 Description: See more information about a post date in Instagram.
 Maintainer: ryebread761

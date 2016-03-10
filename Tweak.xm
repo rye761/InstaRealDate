@@ -1,16 +1,12 @@
 #define pixelsPerLetter 5
 
-@interface IGDate : NSObject
-- (double) timeIntervalSince1970;
-@end
-
-@protocol IGFeedHeaderItem <NSObject>
-@property(readonly, assign) IGDate *takenAt;
+@interface IGFeedItemHeaderViewModel : NSObject
+@property (retain, nonatomic) NSDate *takenAt;
 @end
 
 @interface IGFeedItemHeader : UIView
 @property (retain, nonatomic) UILabel *timestampLabel;
-@property (retain, nonatomic) id<IGFeedHeaderItem> feedItem;
+@property (readonly, nonatomic) IGFeedItemHeaderViewModel *viewModel;
 - (void) showFullDate;
 @end
 
@@ -39,7 +35,7 @@ unsigned int defaultLabelPosition;
 - (void) showFullDate {
 	//Expand the date label
 	if (self.timestampLabel.frame.origin.x == defaultLabelPosition) {
-		NSDate *takenNSDate = [NSDate dateWithTimeIntervalSince1970:[self.feedItem.takenAt timeIntervalSince1970]];
+		NSDate *takenNSDate = self.viewModel.takenAt;
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		if (!showDateString) {
 			[dateFormatter setDateStyle:NSDateFormatterNoStyle];
